@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.header__menu a{
+    @apply px-10 bg-menu-icon bg-menu-icon-size bg-menu-icon-position bg-no-repeat;
+}
+
+.cart-icon sup{
+    @apply absolute text-white bg-fulton-green flex items-center justify-center w-5 h-5 rounded-full right-[-8px] top-[-6px];
+}

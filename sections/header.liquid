@@ -1,30 +1,36 @@
-<header>
-  <div class="bg-fulton-green text-fulton-yellow text-center p-1.5 uppercase">
+<header class="border-b border-fulton-light-green">
+  <div class="bg-fulton-green text-fulton-yellow text-center leading-none p-2 uppercase flex gap-5 items-center justify-center">
     <p>{{ section.settings.top_text }}</p>
+    {% if section.settings.top_link != blank %}<a href="{{ section.settings.top_link }}" title="{{ section.settings.top_link_text }}">{{ section.settings.top_link_text }}</a>{% endif %}
   </div>
-{% comment %}   <h2 class="header__title">
-    {{ shop.name | link_to: routes.root_url }}
-  </h2>
+  <div>
+    <div class="pl-[138px] pr-[110px] py-7 flex items-center justify-between gap-4">
+      <div class="w-full max-w-[126px]">
+        {% if section.settings.site_logo != blank %}
+          {{ section.settings.site_logo | image_url: width: 125 | image_tag: alt: 'Site Logo', loading: 'lazy' }}
+        {% endif %}
+      </div>
+      <div class="header__menu text-[28px] text-fulton-green flex items-center gap-5">
+        {% for link in section.settings.menu.links %}
+          {{ link.title | link_to: link.url }}
+        {% endfor %}
+      </div>
+      <div class="flex items-center gap-14">
+        {% if section.settings.featured_link != blank %}
+          <a href="{{ section.settings.featured_link }}" class="bg-fulton-yellow text-fulton-green text-lg py-[18px] px-[47px] leading-none" title="{{ section.settings.featured_link_text }}">{{ section.settings.featured_link_text }}</a>
+        {% endif %}
+        <a href="{{ routes.cart_url }}" class="cart-icon relative">
+          {% if cart.item_count > 0 %}
+            <sup>{{ cart.item_count }}</sup>
+          {% endif %}
 
-  <div class="header__menu">
-    {% for link in section.settings.menu.links %}
-      {{ link.title | link_to: link.url }}
-    {% endfor %}
+          <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3.1875 4.25H5.151C5.8735 4.25 6.50392 4.73592 6.69092 5.43292L7.2335 7.46867M7.2335 7.46867C15.1252 7.24751 23.0094 8.1248 30.6595 10.0753C29.4922 13.5518 28.1052 16.9292 26.5172 20.1875H10.625M7.2335 7.46867L10.625 20.1875M10.625 20.1875C9.49783 20.1875 8.41683 20.6353 7.6198 21.4323C6.82277 22.2293 6.375 23.3103 6.375 24.4375H28.6875M8.5 28.6875C8.5 28.9693 8.38806 29.2395 8.1888 29.4388C7.98954 29.6381 7.71929 29.75 7.4375 29.75C7.15571 29.75 6.88546 29.6381 6.6862 29.4388C6.48694 29.2395 6.375 28.9693 6.375 28.6875C6.375 28.4057 6.48694 28.1355 6.6862 27.9362C6.88546 27.7369 7.15571 27.625 7.4375 27.625C7.71929 27.625 7.98954 27.7369 8.1888 27.9362C8.38806 28.1355 8.5 28.4057 8.5 28.6875ZM26.5625 28.6875C26.5625 28.9693 26.4506 29.2395 26.2513 29.4388C26.052 29.6381 25.7818 29.75 25.5 29.75C25.2182 29.75 24.948 29.6381 24.7487 29.4388C24.5494 29.2395 24.4375 28.9693 24.4375 28.6875C24.4375 28.4057 24.5494 28.1355 24.7487 27.9362C24.948 27.7369 25.2182 27.625 25.5 27.625C25.7818 27.625 26.052 27.7369 26.2513 27.9362C26.4506 28.1355 26.5625 28.4057 26.5625 28.6875Z" stroke="#01483A" stroke-width="2.125" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    </div>
   </div>
-
-  <div class="header__icons">
-    {% if shop.customer_accounts_enabled %}
-      {{ 'icon-account.svg' | inline_asset_content | link_to: routes.account_url }}
-    {% endif %}
-
-    <a href="{{ routes.cart_url }}">
-      {% if cart.item_count > 0 %}
-        <sup>{{ cart.item_count }}</sup>
-      {% endif %}
-
-      {{ 'icon-cart.svg' | inline_asset_content }}
-    </a>
-  </div> {% endcomment %}
 </header>
 
 {% schema %}
@@ -32,15 +38,40 @@
   "name": "t:general.header",
   "settings": [
     {
+      "type": "image_picker",
+      "id": "site_logo",
+      "label": "Site Logo"
+    },
+    {
       "type": "link_list",
       "id": "menu",
       "label": "t:labels.menu"
     },
     {
+      "type": "url",
+      "id": "featured_link",
+      "label": "Featured Link"
+    },
+    {
+      "type": "text",
+      "id": "featured_link_text",
+      "label": "Featured Link Text"
+    },
+    {
       "type": "text",
       "id": "top_text",
       "label": "Top Header Text"
-    }
+    },
+    {
+      "type": "url",
+      "id": "top_link",
+      "label": "Top Header Link"
+    },
+    {
+      "type": "text",
+      "id": "top_link_text",
+      "label": "Top Header Link Text"
+    },
   ]
 }
 {% endschema %}

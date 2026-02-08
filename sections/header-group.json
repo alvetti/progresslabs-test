@@ -13,10 +13,18 @@
   "sections": {
     "header": {
       "type": "header",
-      "settings": {}
+      "settings": {
+        "site_logo": "shopify://shop_images/fulton-logo.svg",
+        "menu": "main-menu",
+        "featured_link": "#",
+        "featured_link_text": "Take The Quiz",
+        "top_text": "FREE SHIPPING OVER $60",
+        "top_link": "shopify://collections/all",
+        "top_link_text": "Shop Now"
+      }
     }
   },
   "order": [
     "header"
-  ],
+  ]
 }

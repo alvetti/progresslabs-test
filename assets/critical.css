@@ -71,9 +71,25 @@ p:empty {
   margin-block-end: 0;
 }
 
+/* Font Family */
+
+@font-face {
+  font-family: 'Edu Favorit Regular';
+  src: url('edu_favorit_regular.woff2') format('woff2');
+  font-style: 400;
+}
+
+@font-face {
+  font-family: 'Edu Favorit Medium';
+  src: url('edu_favorit_medium.woff2') format('woff2');
+  font-style: 500;
+}
+
 /** Theme styles below */
 body {
   font-family: var(--font-primary--family);
   background-color: var(--color-background);
   color: var(--color-foreground);
+  font-family: 'Edu Favorit Regular';
 }
+
