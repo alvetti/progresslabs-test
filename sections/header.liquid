@@ -7,7 +7,7 @@
     <div class="pl-[138px] pr-[110px] py-7 flex items-center justify-between gap-4">
       <div class="w-full max-w-[126px]">
         {% if section.settings.site_logo != blank %}
-          {{ section.settings.site_logo | image_url: width: 125 | image_tag: alt: 'Site Logo', loading: 'lazy' }}
+          <a href="{{ routes.root_url }}" title="Site Logo">{{ section.settings.site_logo | image_url: width: 125 | image_tag: alt: 'Site Logo', loading: 'lazy' }}</a>
         {% endif %}
       </div>
       <div class="header__menu text-[28px] text-fulton-green flex items-center gap-5">

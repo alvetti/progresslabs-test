@@ -5,46 +5,197 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/product
 {% endcomment %}
 
-<div class="product-images">
-  {% for image in product.images %}
-    {% render 'image', class: 'product-image', image: image %}
-  {% endfor %}
-</div>
-
-<div class="product-info">
-  <h1>{{ product.title }}</h1>
-  <p>{{ product.price | money }}</p>
-  <p>{{ product.description }}</p>
-</div>
-
-<div class="product-form">
-  {% form 'product', product %}
-    {% assign current_variant = product.selected_or_first_available_variant %}
-
-    <select name="id">
-      {% for variant in product.variants %}
-        <option
-          value="{{ variant.id }}"
-          {% if variant == current_variant %}
-            selected="selected"
-          {% endif %}
-        >
-          {{ variant.title }} - {{ variant.price | money }}
-        </option>
+<div class="container pt-14 flex gap-[30px]">
+  <div class="product__gallery">
+    <ul class="flex gap-[22px] flex-wrap">
+      {% for image in product.images %}
+        <li class="w-[calc(50%_-_11px)] border border-fulton-light-green rounded-[20px] overflow-hidden">
+          {{ image | image_url: width: 800 | image_tag: alt: image.alt, class: 'w-full aspect-[1.3] object-cover', loading: 'lazy' }}
+        </li>
       {% endfor %}
-    </select>
+    </ul>
+  </div>
+  <div class="product__details w-[420px] shrink-0">
+    <h1 class="text-fulton-green text-3xl font-semibold mb-2">{{ product.title }}</h1>
+    <div class="rating flex gap-3 items-center mb-4">
+      <ul class="stars flex gap-1">
+        {% for i in (1..product.metafields.custom.rating) %}
+          <li class="w-4">
+            <svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.88 117.1"><defs><style>.cls-1{fill:#FFBF3F;}</style></defs><title>star-symbol</title><path class="cls-1" d="M64.42,2,80.13,38.7,120,42.26a3.2,3.2,0,0,1,1.82,5.62h0L91.64,74.18l8.9,39A3.19,3.19,0,0,1,98.12,117a3.27,3.27,0,0,1-2.46-.46L61.41,96.1,27.07,116.64a3.18,3.18,0,0,1-4.38-1.09,3.14,3.14,0,0,1-.37-2.38h0l8.91-39L1.09,47.88a3.24,3.24,0,0,1-.32-4.52,3.32,3.32,0,0,1,2.29-1l39.72-3.56L58.49,2a3.24,3.24,0,0,1,5.93,0Z"/></svg>
+          </li>
+        {% endfor %}
+      </ul>
+      <a href="#" class="leading-none text-black font-semibold underline">{{ product.metafields.custom.reviews }} {% if product.metafields.custom.reviews == 1 %}Review{% else %}Reviews{% endif %}</a>
+    </div>
+    <div class="price flex gap-4 items-center mb-6">
+      <div class="current text-fulton-green text-4xl font-semibold">{{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}</div>
+      <div class="compare text-fulton-light-green text-4xl font-semibold line-through">{{ product.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }}</div>
+      {% if product.selected_or_first_available_variant.compare_at_price != product.selected_or_first_available_variant.price %}<div class="discount bg-fulton-light-green text-lg text-fulton-green p-[9px] leading-none"><span>{{ product.compare_at_price_max | minus:product.selected_or_first_available_variant.price | times:100.0 | divided_by:product.compare_at_price_max | money_without_currency | times:100 | remove: '.0' }}</span>% OFF</div>{% endif %}
+    </div>
+    <div class="description text-lg text-fulton-green pr-5">
+      {{ product.description }}
+    </div>
+    <div class="options">
+      {% for option in product.options_with_values %}
+        {% if option.name != 'Size' %}
+          <div class="option-group mb-2" id="{{ option.name | downcase}}">
+            <fieldset class="flex gap-3">
+              <legend class="text-fulton-green text-sm mb-1 block">{{ option.name }}:</legend>
+              {% for value in option.values %}
+                <input class="hidden" type="radio" name="{{ option.name | downcase}}" id="{{ value | downcase }}"{% if forloop.index == 1 %} checked{% endif %}>
+                <label for="{{ value | downcase }}" class="w-full text-lg leading-none text-center rounded-[10px] bg-white text-fulton-green border border-fulton-green p-2 cursor-pointer">{{ value }}</label>
+              {% endfor %}
+            </fieldset>
+          </div>
+        {% else %}
+          <div class="option-group mb-2" id="{{ option.name | downcase}}">
+            <fieldset class="flex gap-1">
+              <legend class="text-fulton-green text-sm mb-1 block">{{ option.name }}:</legend>
+              {% for variant in product.variants %}
+                <input 
+                  class="hidden"
+                  data-option="{{ variant.option1 | downcase }}_{{ variant.option2 | downcase }}"
+                  data-size="{{ variant.option3 | downcase }}"
+                  type="radio" 
+                  name="{{ option.name | downcase}}" 
+                  id="{{ variant.id }}"
+                  {% if forloop.index == 1 %} checked{% endif %}
+                >
+                <label for="{{ variant.id }}" class="w-full text-lg leading-none text-center rounded-[10px] bg-white text-fulton-green border border-fulton-green p-2 cursor-pointer">{{ variant.option3 | downcase }}</label>
+              {% endfor %}
+            </fieldset>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="product-form">
+      {% form 'product', product %}
+        {% assign current_variant = product.selected_or_first_available_variant %}
 
-    <input type="text" name="quantity" min="1" value="1">
+        <select name="id" class="hidden">
+          {% for variant in product.variants %}
+            <option
+              value="{{ variant.id }}"
+              data-price="{{ variant.price | money_without_currency | divided_by:1 | remove: '.0' }}"
+              data-compare="{{ variant.compare_at_price | money_without_currency | divided_by:1 | remove: '.0' }}"
+              {% if variant == current_variant %}
+                selected="selected"
+              {% endif %}
+            >
+              {{ variant.title }}
+            </option>
+          {% endfor %}
+        </select>
 
-    <input type="submit" value="Add to cart">
-    {{ form | payment_button }}
-  {% endform %}
+        <input type="text" name="quantity" min="1" value="1" class="hidden">
+
+        <button class="bg-fulton-green text-white text-xl flex gap-4 items-center justify-center w-full p-3 mt-4" type="submit">Add to Cart <span id="button-price">{{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span></button>
+      {% endform %}
+    </div>
+    {% if section.settings.guarantee_text != blank %}
+      <div class="guarantee mt-4 flex gap-4 items-center justify-center text-[22px] text-fulton-green">
+        {{ section.settings.guarantee_icon | image_url: width: 30 | image_tag: alt: 'Site Logo', loading: 'lazy' }}
+        {{ section.settings.guarantee_text }}
+      </div>
+    {% endif %}
+  </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let widthOptions = document.querySelectorAll('#width input');
+    let genderOptions = document.querySelectorAll('#gender input');
+    let sizeOptions = document.querySelectorAll('#size input');
+    let selectOptions = document.querySelector('.product-form select');
+    let widthSelected = document.querySelector('#width input:checked');
+    let genderSelected = document.querySelector('#gender input:checked');
+    let clickedOption = widthSelected.id + '_' + genderSelected.id;
+    let buttonPrice = document.getElementById('button-price');
+    let priceCurrent = document.querySelector('.price .current');
+    let priceCompare = document.querySelector('.price .compare');
+    let priceDiscount = document.querySelector('.price .discount span');
+
+    {{ product.compare_at_price_max | minus:product.selected_or_first_available_variant.price | times:100.0 | divided_by:product.compare_at_price_max | money_without_currency | times:100 | remove: '.0' }}
+
+    sizeOptions.forEach(sizeOption => {
+      sizeOption.nextElementSibling.classList.remove('show');
+
+      if(sizeOption.dataset.option == clickedOption){
+        sizeOption.nextElementSibling.classList.add('show');
+      }
+
+      sizeOption.addEventListener('click', function(){
+        selectOptions.value = this.id;
+        let selectedOption = document.querySelector('.product-form select option:checked');
+        let discountValue = 100 - ((selectedOption.dataset.price * 100) / selectedOption.dataset.compare);
+        buttonPrice.textContent = '$' + selectedOption.dataset.price;
+        priceCurrent.textContent = '$' + selectedOption.dataset.price;
+        priceCompare.textContent = '$' + selectedOption.dataset.compare;
+        priceDiscount.textContent = discountValue.toFixed(0);
+        });
+    });
+
+    widthOptions.forEach(widthOption => {
+
+      widthOption.addEventListener('click', function(){
+        let widthSelected = this.id;
+        let genderSelected = document.querySelector('#gender input:checked');
+        let sizeSelected = document.querySelector('#size input:checked');
+        let clickedOption = widthSelected + '_' + genderSelected.id;
+
+        sizeOptions.forEach(sizeOption => {
+          sizeOption.nextElementSibling.classList.remove('show');
+
+          if(sizeOption.dataset.option == clickedOption){
+            sizeOption.nextElementSibling.classList.add('show');
+            let firstOption = document.querySelector('[data-option="' + clickedOption + '"]');
+            firstOption.checked = true;
+            selectOptions.value = firstOption.id;
+          }
+        });
+      });
+    });
+
+    genderOptions.forEach(genderOption => {
+
+      genderOption.addEventListener('click', function(){
+        let genderSelected = this.id;
+        let widthSelected = document.querySelector('#width input:checked');
+        let sizeSelected = document.querySelector('#size input:checked');
+        let clickedOption = widthSelected.id + '_' + genderSelected;
+
+        sizeOptions.forEach(sizeOption => {
+          sizeOption.nextElementSibling.classList.remove('show');
+
+          if(sizeOption.dataset.option == clickedOption){
+            sizeOption.nextElementSibling.classList.add('show');
+            let firstOption = document.querySelector('[data-option="' + clickedOption + '"]');
+            firstOption.checked = true;
+            selectOptions.value = firstOption.id;
+          }
+        });
+      });
+    });
+
+    
+});
+</script>
 
 {% schema %}
 {
   "name": "t:general.product",
-  "settings": [],
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "guarantee_icon",
+      "label": "Guarantee Icon"
+    },
+    {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Guarantee Text"
+    }
+  ],
   "disabled_on": {
     "groups": ["header", "footer"]
   }

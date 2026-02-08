@@ -11,7 +11,10 @@
   "sections": {
     "main": {
       "type": "product",
-      "settings": {}
+      "settings": {
+        "guarantee_icon": "shopify://shop_images/icon.png",
+        "guarantee_text": "90-day comfort guarantee"
+      }
     }
   },
   "order": [

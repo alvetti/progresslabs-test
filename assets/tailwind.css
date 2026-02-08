@@ -9,3 +9,27 @@
 .cart-icon sup{
     @apply absolute text-white bg-fulton-green flex items-center justify-center w-5 h-5 rounded-full right-[-8px] top-[-6px];
 }
+
+.description ul{
+    @apply list-disc text-sm gap-x-4 flex flex-wrap mt-4 ml-[15px] mb-4;
+}
+
+.description ul li{
+    @apply w-[32%] leading-none mb-1;
+}
+
+.description ul li:nth-child(even){
+    @apply text-fulton-light-green;
+}
+
+.option-group input:checked + label{
+    @apply bg-fulton-green text-fulton-yellow;
+}
+
+#size.option-group label{
+    @apply hidden;
+}
+
+#size.option-group label.show{
+    @apply block;
+}
