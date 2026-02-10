@@ -1,0 +1,110 @@
+{% style %}
+  .icons-grid-{{ section.id }} ul{
+    column-gap: {{ section.settings.desktop_gap }}px;
+  }
+  .icons-grid-{{ section.id }} ul li{
+      margin-bottom: 28px;
+  }
+  {% if section.settings.desktop_col != 0 %}
+    .icons-grid-{{ section.id }} ul{
+      flex-wrap: wrap;
+    }
+    .icons-grid-{{ section.id }} ul li{
+      flex: 0 0 calc((100% - ({{ section.settings.desktop_col }} - 1) * {{ section.settings.desktop_gap }}px) / {{ section.settings.desktop_col }});
+    }
+  {% endif %}
+
+  @media screen and (max-width: 767px){
+    .icons-grid-{{ section.id }} ul{
+      column-gap: {{ section.settings.mobile_gap }}px;
+    }
+    {% if section.settings.mobile_col != 0 %}
+      .icons-grid-{{ section.id }} ul{
+        flex-wrap: wrap;
+      }
+      .icons-grid-{{ section.id }} ul li{
+        flex: 0 0 calc((100% - ({{ section.settings.mobile_col }} - 1) * {{ section.settings.mobile_gap }}px) / {{ section.settings.mobile_col }});
+      }
+  {% endif %}
+  }
+{% endstyle %}
+
+<div class="section-icons-grid icons-grid-{{ section.id }} pt-14 pb-14">
+  <div class="container">
+    <ul class="flex items-center justify-center">
+      {% for block in section.blocks %}
+        <li class="flex items-center justify-center">
+          {{
+            block.settings.icon
+            | image_url: width: 500
+            | image_tag: alt: 'Icon', class: 'w-full max-w-48', loading: 'lazy'
+          }}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Icons Grid",
+  "settings": [
+    {
+      "type": "range",
+      "id": "desktop_col",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "label": "Desktop Columns",
+      "default": 5
+    },
+    {
+      "type": "range",
+      "id": "desktop_gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "Desktop Gap",
+      "unit": "px",
+      "default": 10
+    },
+    {
+      "type": "range",
+      "id": "mobile_col",
+      "min": 0,
+      "max": 5,
+      "step": 1,
+      "label": "Mobile Columns",
+      "default": 2
+    },
+    {
+      "type": "range",
+      "id": "mobile_gap",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "label": "Mobile Gap",
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "name": "Icon",
+      "type": "icon",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icons Grid"
+    }
+  ]
+}
+{% endschema %}

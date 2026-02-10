@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .header__menu a{
-    @apply px-10 bg-menu-icon bg-menu-icon-size bg-menu-icon-position bg-no-repeat;
+    @apply px-10 bg-menu-icon bg-menu-icon-size bg-menu-icon-position bg-no-repeat hover:underline;
 }
 
 .cart-icon sup{

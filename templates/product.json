@@ -13,11 +13,63 @@
       "type": "product",
       "settings": {
         "guarantee_icon": "shopify://shop_images/icon.png",
-        "guarantee_text": "90-day comfort guarantee"
+        "guarantee_text": "90-day comfort guarantee",
+        "help_text": "Help Me Choose",
+        "help_link": "#"
+      }
+    },
+    "icons_grid_FnREmX": {
+      "type": "icons-grid",
+      "blocks": {
+        "icon_4UUzBD": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon1.webp"
+          }
+        },
+        "icon_gKagqB": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon2.webp"
+          }
+        },
+        "icon_QnKnFF": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon3.webp"
+          }
+        },
+        "icon_VBBcXi": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon4.webp"
+          }
+        },
+        "icon_Uct8JP": {
+          "type": "icon",
+          "settings": {
+            "icon": "shopify://shop_images/icon5.webp"
+          }
+        }
+      },
+      "block_order": [
+        "icon_4UUzBD",
+        "icon_gKagqB",
+        "icon_QnKnFF",
+        "icon_VBBcXi",
+        "icon_Uct8JP"
+      ],
+      "name": "Icons Grid",
+      "settings": {
+        "desktop_col": 0,
+        "desktop_gap": 10,
+        "mobile_col": 2,
+        "mobile_gap": 40
       }
     }
   },
   "order": [
-    "main"
+    "main",
+    "icons_grid_FnREmX"
   ]
 }

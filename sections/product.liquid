@@ -5,8 +5,8 @@
   https://shopify.dev/docs/storefronts/themes/architecture/templates/product
 {% endcomment %}
 
-<div class="container pt-14 flex gap-[30px]">
-  <div class="product__gallery">
+<div class="container pt-7 lg:pt-14 flex flex-col lg:flex-row gap-[30px]">
+  <div class="product__gallery hidden lg:block">
     <ul class="flex gap-[22px] flex-wrap">
       {% for image in product.images %}
         <li class="w-[calc(50%_-_11px)] border border-fulton-light-green rounded-[20px] overflow-hidden">
@@ -15,7 +15,7 @@
       {% endfor %}
     </ul>
   </div>
-  <div class="product__details w-[420px] shrink-0">
+  <div class="product__details w-full lg:max-w-[420px] shrink-0">
     <h1 class="text-fulton-green text-3xl font-semibold mb-2">{{ product.title }}</h1>
     <div class="rating flex gap-3 items-center mb-4">
       <ul class="stars flex gap-1">
@@ -48,9 +48,10 @@
             </fieldset>
           </div>
         {% else %}
-          <div class="option-group mb-2" id="{{ option.name | downcase}}">
+          <div class="option-group mb-2 relative" id="{{ option.name | downcase}}">
             <fieldset class="flex gap-1">
               <legend class="text-fulton-green text-sm mb-1 block">{{ option.name }}:</legend>
+              {% if section.settings.help_link %}<a href="{{ section.settings.help_link }}" title="{{ section.settings.help_text }}" class="absolute top-0 right-0 text-fulton-green text-sm underline">{{ section.settings.help_text }}</a>{% endif %}
               {% for variant in product.variants %}
                 <input 
                   class="hidden"
@@ -89,11 +90,11 @@
 
         <input type="text" name="quantity" min="1" value="1" class="hidden">
 
-        <button class="bg-fulton-green text-white text-xl flex gap-4 items-center justify-center w-full p-3 mt-4" type="submit">Add to Cart <span id="button-price">{{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span></button>
+        <button class="bg-fulton-green text-white text-xl flex gap-4 items-center justify-center w-full p-3 mt-4 transition-all hover:text-fulton-yellow" type="submit">Add to Cart <span id="button-price">{{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span></button>
       {% endform %}
     </div>
     {% if section.settings.guarantee_text != blank %}
-      <div class="guarantee mt-4 flex gap-4 items-center justify-center text-[22px] text-fulton-green">
+      <div class="guarantee mt-4 flex gap-4 items-center justify-center text-base lg:text-[22px] text-fulton-green">
         {{ section.settings.guarantee_icon | image_url: width: 30 | image_tag: alt: 'Site Logo', loading: 'lazy' }}
         {{ section.settings.guarantee_text }}
       </div>
@@ -151,6 +152,12 @@ document.addEventListener('DOMContentLoaded', function() {
             let firstOption = document.querySelector('[data-option="' + clickedOption + '"]');
             firstOption.checked = true;
             selectOptions.value = firstOption.id;
+            let selectedOption = document.querySelector('.product-form select option:checked');
+            let discountValue = 100 - ((selectedOption.dataset.price * 100) / selectedOption.dataset.compare);
+            buttonPrice.textContent = '$' + selectedOption.dataset.price;
+            priceCurrent.textContent = '$' + selectedOption.dataset.price;
+            priceCompare.textContent = '$' + selectedOption.dataset.compare;
+            priceDiscount.textContent = discountValue.toFixed(0);
           }
         });
       });
@@ -172,6 +179,12 @@ document.addEventListener('DOMContentLoaded', function() {
             let firstOption = document.querySelector('[data-option="' + clickedOption + '"]');
             firstOption.checked = true;
             selectOptions.value = firstOption.id;
+            let selectedOption = document.querySelector('.product-form select option:checked');
+            let discountValue = 100 - ((selectedOption.dataset.price * 100) / selectedOption.dataset.compare);
+            buttonPrice.textContent = '$' + selectedOption.dataset.price;
+            priceCurrent.textContent = '$' + selectedOption.dataset.price;
+            priceCompare.textContent = '$' + selectedOption.dataset.compare;
+            priceDiscount.textContent = discountValue.toFixed(0);
           }
         });
       });
@@ -194,6 +207,17 @@ document.addEventListener('DOMContentLoaded', function() {
       "type": "text",
       "id": "guarantee_text",
       "label": "Guarantee Text"
+    },
+    {
+      "type": "text",
+      "id": "help_text",
+      "label": "Help Text",
+      "default": "Help Me Choose"
+    },
+    {
+      "type": "url",
+      "id": "help_link",
+      "label": "Help Link"
     }
   ],
   "disabled_on": {

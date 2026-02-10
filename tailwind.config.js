@@ -8,16 +8,15 @@ module.exports = {
     './assets/*.liquid',
   ],
   theme: {
+    screens: {
+      'md': '100%',
+      'lg': '768px',
+      'xl': '998px',
+      '2xl': '1298px',
+    },
     container: {
       center: true,
-      padding: '20px',
-      screens: {
-        'sm': '300px',
-        'md': '420px',
-        'lg': '768px',
-        'xl': '997px',
-        '2xl': '1297px',
-      },
+      padding: '20px'
     },
     extend: {
       colors: {
