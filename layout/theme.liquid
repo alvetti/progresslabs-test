@@ -20,11 +20,15 @@
     {% # Load and preload the critical CSS %}
     {{ 'critical.css' | asset_url | stylesheet_tag: preload: true }}
     {{ 'output.css' | asset_url | stylesheet_tag }}
+    {% if template == "product" %}
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css"/>
+    {% endif %}
 
     {% # Social, title, etc. %}
     {% render 'meta-tags' %}
 
     {{ content_for_header }}
+    
   </head>
 
   <body>
@@ -34,4 +38,9 @@
 
     {% sections 'footer-group' %}
   </body>
+  <script src="{{ 'menu.js' | asset_url }}" defer></script>
+  {% if template == "product" %}
+    <script src="{{ 'product.js' | asset_url }}" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
+  {% endif %}
 </html>

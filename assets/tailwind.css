@@ -2,34 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-.header__menu a{
+.header__menu a {
     @apply px-10 bg-menu-icon bg-menu-icon-size bg-menu-icon-position bg-no-repeat hover:underline;
 }
 
-.cart-icon sup{
+.cart-icon sup {
     @apply absolute text-white bg-fulton-green flex items-center justify-center w-5 h-5 rounded-full right-[-8px] top-[-6px];
 }
 
-.description ul{
+.description ul {
     @apply list-disc text-sm gap-x-4 flex flex-wrap mt-4 ml-[15px] mb-4;
 }
 
-.description ul li{
+.description ul li {
     @apply w-[32%] leading-none mb-1;
 }
 
-.description ul li:nth-child(even){
+.description ul li:nth-child(even) {
     @apply text-fulton-light-green;
 }
 
-.option-group input:checked + label{
+.option-group input:checked+label {
     @apply bg-fulton-green text-fulton-yellow;
 }
 
-#size.option-group label{
+#size.option-group label {
     @apply hidden;
 }
 
-#size.option-group label.show{
+#size.option-group label.show {
     @apply block;
+}
+
+.swiper-pagination .swiper-pagination-bullet {
+    @apply w-[10px] h-[10px] !ml-0 !mr-[18px] bg-fulton-light-green opacity-100;
+}
+
+.swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    @apply bg-fulton-green;
+}
+
+.header__menu.show {
+    @apply flex;
 }

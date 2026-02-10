@@ -15,14 +15,17 @@
           <a href="{{ routes.root_url }}" title="Site Logo">{{ section.settings.site_logo | image_url: width: 125 | image_tag: alt: 'Site Logo', loading: 'lazy' }}</a>
         {% endif %}
       </div>
-      <div class="hidden header__menu text-[28px] text-fulton-green xl:flex items-center gap-5">
+      <div class="hidden header__menu absolute xl:relative flex-col xl:flex-row bg-white w-full xl:w-auto top-[122px] xl:top-0 left-0 border-b border-fulton-light-green z-50 xl:border-0 p-5 xl:p-0 text-[28px] text-fulton-green xl:flex items-center gap-5" id="header_menu">
         {% for link in section.settings.menu.links %}
           {{ link.title | link_to: link.url }}
         {% endfor %}
+        {% if section.settings.featured_link != blank %}
+          <a href="{{ section.settings.featured_link }}" class="xl:hidden !bg-none bg-fulton-yellow text-fulton-green text-lg py-[18px] px-[47px] leading-none transition-all hover:bg-fulton-green hover:text-fulton-yellow" title="{{ section.settings.featured_link_text }}">{{ section.settings.featured_link_text }}</a>
+        {% endif %}
       </div>
       <div class="flex items-center gap-14 shrink-0">
         {% if section.settings.featured_link != blank %}
-          <a href="{{ section.settings.featured_link }}" class="hidden lg:block bg-fulton-yellow text-fulton-green text-lg py-[18px] px-[47px] leading-none transition-all hover:bg-fulton-green hover:text-fulton-yellow" title="{{ section.settings.featured_link_text }}">{{ section.settings.featured_link_text }}</a>
+          <a href="{{ section.settings.featured_link }}" class="hidden xl:block bg-fulton-yellow text-fulton-green text-lg py-[18px] px-[47px] leading-none transition-all hover:bg-fulton-green hover:text-fulton-yellow" title="{{ section.settings.featured_link_text }}">{{ section.settings.featured_link_text }}</a>
         {% endif %}
         <a href="{{ routes.cart_url }}" class="cart-icon relative">
           {% if cart.item_count > 0 %}
@@ -37,6 +40,10 @@
     </div>
   </div>
 </header>
+
+<script>
+
+</script>
 
 {% schema %}
 {
